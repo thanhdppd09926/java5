@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" th:fragment="view(content)">
+
+<head th:replace="~{/layouts/header}"></head>
+
+<body>
+    <header th:replace="~{/layouts/nav}"></header>
+    <main th:replace="~{content}">
+
+    </main>
+    <div th:replace="~{/layouts/footer}"></div>
+
+</body>
+
+</html>

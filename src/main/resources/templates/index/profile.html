@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/layouts/header}">
+    <meta charset="UTF-8">
+    <title>Hồ sơ cá nhân</title>
+
+</head>
+
+<body>
+    <header th:replace="~{/layouts/nav}"></header>
+    <main>
+        <div class="profile-container">
+            <h1>Hồ sơ cá nhân</h1>
+
+            <!-- Nếu chưa đăng nhập -->
+            <div th:if="${session.user == null}">
+                <div class="alert alert-warning">
+                    Vui lòng <a href="/login" class="alert-link">đăng nhập</a> để xem hồ sơ.
+                </div>
+            </div>
+
+            <!-- Nếu đã đăng nhập -->
+            <div th:if="${session.user != null}">
+                <!-- Chế độ xem thông tin -->
+                <div th:unless="${editMode}">
+                    <!-- <div class="profile-image">
+                        <img th:src="${account.photo != null ? '/photos/' + account.photo : '/photos/default.jpg'}"
+                            alt="Profile Image" />
+                    </div> -->
+                    <div class="profile-info">
+                        <label>Tên đăng nhập:</label>
+                        <span th:text="${account.username}"></span>
+                    </div>
+                    <div class="profile-info">
+                        <label>Họ tên:</label>
+                        <span th:text="${account.fullname}"></span>
+                    </div>
+                    <div class="profile-info">
+                        <label>Email:</label>
+                        <span th:text="${account.email}"></span>
+                    </div>
+                    <div class="profile-info">
+                        <label>Trạng thái:</label>
+                        <span th:text="${account.activated ? 'Đã kích hoạt' : 'Chưa kích hoạt'}"></span>
+                    </div>
+                    <div class="profile-info">
+                        <label>Quyền:</label>
+                        <span th:text="${account.admin ? 'Quản trị viên' : 'Người dùng'}"></span>
+                    </div>
+                    <div class="btn-container">
+                        <a href="/accounts/edit" class="btn btn-primary btn-custom">Chỉnh sửa</a>
+                        <a href="/logout" class="btn btn-danger btn-custom">Đăng xuất</a>
+                    </div>
+                </div>
+
+                <!-- Chế độ chỉnh sửa -->
+                <div th:if="${editMode}">
+                    <form th:action="@{/accounts/edit}" method="post" enctype="multipart/form-data">
+                        <!-- <div class="profile-image">
+                            <img th:src="${account.photo != null ? '/photos/' + account.photo : '/photos/default.jpg'}"
+                                alt="Profile Image" />
+                        </div> -->
+                        <div class="form-group">
+                            <label>Tên đăng nhập</label>
+                            <input type="text" name="username" class="form-control" th:value="${account.username}"
+                                readonly />
+                        </div>
+                        <div class="form-group">
+                            <label>Mật khẩu mới (để trống nếu không đổi)</label>
+                            <input type="password" name="password" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>Họ tên</label>
+                            <input type="text" name="fullname" class="form-control" th:value="${account.fullname}"
+                                required />
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control" th:value="${account.email}"
+                                required />
+                        </div>
+                        <div th:if="${session.user != null && session.user.admin == true}">
+                            <div class="form-group">
+                                <label>Trạng thái</label>
+                                <select name="activated" class="form-control">
+                                    <option value="true" th:selected="${account.activated}">Đang hoạt động</option>
+                                    <option value="false" th:selected="${!account.activated}">Ngưng hoạt động</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Quyền quản trị</label>
+                                <select name="admin" class="form-control">
+                                    <option value="true" th:selected="${account.admin}">Quản trị viên</option>
+                                    <option value="false" th:selected="${!account.admin}">Người dùng</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="btn-container">
+                            <button type="submit" class="btn btn-primary btn-custom">Lưu</button>
+                            <a href="/accounts/profile" class="btn btn-danger btn-custom">Hủy</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div th:replace="~{/layouts/footer}"></div>
+</body>
+
+</html>
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f5f7fa;
+        color: #333;
+    }
+
+    .profile-container {
+        max-width: 700px;
+        margin: 50px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .profile-container:hover {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        font-weight: 700;
+    }
+
+    .profile-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        transition: background 0.3s ease;
+    }
+
+    .profile-info:hover {
+        background: #e9ecef;
+    }
+
+    .profile-info label {
+        font-weight: bold;
+        color: #34495e;
+        width: 40%;
+    }
+
+    .profile-info span {
+        color: #7f8c8d;
+        width: 60%;
+        text-align: right;
+    }
+
+    .btn-container {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .btn-custom {
+        padding: 10px 25px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin: 0 10px;
+    }
+
+    .btn-primary {
+        background: #3498db;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: #2980b9;
+        transform: translateY(-2px);
+    }
+
+    .btn-danger {
+        background: #e74c3c;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background: #c0392b;
+        transform: translateY(-2px);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        color: #34495e;
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #dcdcdc;
+        padding: 10px;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+    }
+
+    .alert {
+        text-align: center;
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 8px;
+    }
+</style>

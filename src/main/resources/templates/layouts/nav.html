@@ -1,0 +1,110 @@
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/home">OCEANS</a>
+        <form class="d-flex mx-auto" action="/search" method="get">
+            <input class="form-control search-bar me-2" type="search" name="keyword" placeholder="Tìm kiếm sản phẩm..."
+                aria-label="Search">
+            <button class="btn btn-outline-primary" type="submit">Tìm</button>
+        </form>
+        <div class="d-flex align-items-center ms-3">
+            <div th:if="${session.user != null}">
+                <span class="nav-link">Xin chào: <span th:text="${session.user.fullname}"></span></span>
+            </div>
+            <div th:if="${session.user == null}">
+                <a class="nav-link" href="/login">Đăng Nhập</a>
+            </div>
+            <div th:if="${session.user != null}">
+                <a class="nav-link" href="/accounts/profile">Hồ sơ</a>
+                <a class="nav-link" href="/logout">Đăng Xuất</a>
+            </div>
+            <a class="nav-link" th:href="@{|/cart?username=${session.user?.username}|}">
+                <img src="https://img.icons8.com/material-outlined/24/000000/shopping-cart.png" alt="Cart Icon" />
+            </a>
+        </div>
+    </div>
+</nav>
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container-fluid justify-content-center">
+        <div class="navbar-nav">
+            <a class="nav-link" href="/categories/C001">Điện tử</a>
+            <a class="nav-link" href="/categories/C002">Sách</a>
+            <a class="nav-link" href="/categories/C003">Quần áo</a>
+            <a class="nav-link" href="/categories/C004">Nhà cửa & Bếp</a>
+            <a class="nav-link" href="/categories/C005">Sức khỏe & Sắc đẹp</a>
+            <div th:if="${session.user != null && session.user.admin == true}" class="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Quản Lý</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/accounts/admin">Accounts</a></li>
+                    <li><a class="dropdown-item" href="/categories/admin">Categories</a></li>
+                    <li><a class="dropdown-item" href="/products/admin">Products</a></li>
+                    <li><a class="dropdown-item" href="/orders/admin">Orders</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<style>
+    .navbar-custom {
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        padding: 1rem 2rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: white !important;
+        letter-spacing: 1px;
+    }
+
+    .search-bar {
+        width: 400px;
+        border-radius: 25px;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-outline-primary {
+        border-radius: 25px;
+        padding: 0.5rem 1.5rem;
+        color: white;
+        border-color: white;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background: white;
+        color: #3498db;
+    }
+
+    .nav-link {
+        color: white !important;
+        font-weight: 500;
+        margin: 0 15px;
+        transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: #ffd700 !important;
+        transform: translateY(-2px);
+    }
+
+    .nav-link img {
+        filter: invert(1);
+    }
+
+    .dropdown-menu {
+        background: #2c3e50;
+        border: none;
+        border-radius: 10px;
+    }
+
+    .dropdown-item {
+        color: white;
+    }
+
+    .dropdown-item:hover {
+        background: #3498db;
+    }
+</style>
