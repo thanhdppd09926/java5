@@ -258,4 +258,5 @@ public class AccountsController {
             logger.error("Failed to send new password email to {}: {}", toEmail, e.getMessage());
         }
     }
+    // thanh
 }
